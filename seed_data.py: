@@ -1,0 +1,30 @@
+import pandas as pd
+import random
+from datetime import datetime, timedelta
+
+def generate_mock_data(n=100):
+    depts = ['Cardiology', 'Oncology', 'Orthopedics', 'Pediatrics', 'Emergency', 'General Medicine']
+    branches = ['Mumbai Central', 'Delhi South', 'Bangalore East', 'Chennai North']
+    outcomes = ['Recovered', 'Improved', 'Transferred', 'Deceased']
+    
+    data = []
+    for i in range(n):
+        admit = datetime.now() - timedelta(days=random.randint(1, 60))
+        discharge = admit + timedelta(days=random.randint(1, 15))
+        data.append({
+            'patient_id': i + 1,
+            'age': random.randint(1, 90),
+            'department': random.choice(depts),
+            'branch': random.choice(branches),
+            'admit_date': admit,
+            'discharge_date': discharge,
+            'outcome': random.choice(outcomes),
+            'total_cost': round(random.uniform(5000, 50000), 2),
+            'readmission_30d': random.choice([True, False, False, False]) # 25% rate
+        })
+    return pd.DataFrame(data)
+
+# You can run this locally to generate a CSV to import into your DB
+df = generate_mock_data(500)
+df.to_csv('hospital_mock_data.csv', index=False)
+print("Mock data generated! Import hospital_mock_data.csv into your SQL table.")
